@@ -38,6 +38,7 @@ text.pack(pady=10)
 playPhoto= PhotoImage(file='play-button.png')
 stopPhoto=PhotoImage(file='stop.png')
 pausePhoto=PhotoImage(file='pause.png')
+rewindPhoto=PhotoImage(file='Rewind.png')
 #labelphoto=Label(root,image=photo)
 #labelphoto.pack()
 
@@ -67,6 +68,8 @@ def pause_music():
 	paused=TRUE
 	statusbar['text']="Music paused"
 	mixer.music.pause()	
+def rewind_music():
+	pass
 
 middleframe=Frame(root,relief=SUNKEN,borderwidth=0)
 middleframe.pack(padx=10,pady=10)
@@ -77,6 +80,8 @@ stop=Button(middleframe,image=stopPhoto,command=stop_music)
 stop.pack(side=LEFT,padx=10);
 pause=Button(middleframe,image=pausePhoto,command=pause_music)
 pause.pack(side=RIGHT,padx=10);
+rewind=Button(middleframe,image=rewindPhoto,command=rewind_music)
+rewind.pack(side=RIGHT,padx=10);
 scale=Scale(root,from_=0,to=100,orient=HORIZONTAL,command=set_vol)
 scale.set(40)
 mixer.music.set_volume(40)
