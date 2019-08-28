@@ -35,10 +35,7 @@ root.iconbitmap(r'melody.ico')
 text=Label(root,text="let's make some noise!")
 text.pack(pady=10)
 
-playPhoto= PhotoImage(file='play-button.png')
-stopPhoto=PhotoImage(file='stop.png')
-pausePhoto=PhotoImage(file='pause.png')
-rewindPhoto=PhotoImage(file='Rewind.png')
+
 #labelphoto=Label(root,image=photo)
 #labelphoto.pack()
 
@@ -59,20 +56,47 @@ def play_music():
 def stop_music():
 	mixer.music.stop()
 	statusbar['text']="music is stopped"
+
 def set_vol(val):
 	volume =int(val)/100
 	mixer.music.set_volume(volume)
 #set volume of mixer only takes volume from 0 to 0.999
+
+muted =FALSE
+
 def pause_music():
 	global paused
 	paused=TRUE
 	statusbar['text']="Music paused"
 	mixer.music.pause()	
+
 def rewind_music():
-	pass
+	play_music()
+	statusbar['text']="Music Rewinded"
+
+def mute_music():
+	global muted
+	if muted:	#Unmute the music
+		mixer.music.set_volume(0.4)
+		volume.configure(image=volumePhoto)
+		scale.set(0.4)
+	else:		#mute the music
+		mixer.music.set_volume(0)
+		scale.set(0)	
+		muted=TRUE
+	volume.configure(image=mutePhoto)
+
+def volume_music():
+	mute.configure(image=volumePhoto)
 
 middleframe=Frame(root,relief=SUNKEN,borderwidth=0)
-middleframe.pack(padx=10,pady=10)
+middleframe.pack(padx=20,pady=20)
+playPhoto= PhotoImage(file='play-button.png')
+stopPhoto=PhotoImage(file='stop.png')
+pausePhoto=PhotoImage(file='pause.png')
+rewindPhoto=PhotoImage(file='Rewind.png')
+mutePhoto=PhotoImage(file='mute.png')
+volumePhoto=PhotoImage(file='volume.png')
 
 play =Button(middleframe,image=playPhoto,command=play_music)
 play.pack(side=LEFT,padx=10);
@@ -80,12 +104,20 @@ stop=Button(middleframe,image=stopPhoto,command=stop_music)
 stop.pack(side=LEFT,padx=10);
 pause=Button(middleframe,image=pausePhoto,command=pause_music)
 pause.pack(side=RIGHT,padx=10);
-rewind=Button(middleframe,image=rewindPhoto,command=rewind_music)
-rewind.pack(side=RIGHT,padx=10);
-scale=Scale(root,from_=0,to=100,orient=HORIZONTAL,command=set_vol)
+
+bottomframe=Frame(root)
+bottomframe.pack()
+
+volume=Button(bottomframe,image=volumePhoto,command=mute_music)
+volume.grid(row=0,column=2)
+#mute=Button(bottomframe,image=mutePhoto,command=volume_music)
+#mute.grid()
+rewind=Button(bottomframe,image=rewindPhoto,command=rewind_music)
+rewind.grid(row=0,column=0);
+scale=Scale(bottomframe,from_=0,to=100,orient=HORIZONTAL,command=set_vol)
 scale.set(40)
 mixer.music.set_volume(40)
-scale.pack(pady=10)
+scale.grid(row=0,column=1,pady=10,padx=30)
 
 statusbar=Label(root,text="Welcome to melody",relief=SUNKEN,anchor=W)
 statusbar.pack(side=BOTTOM,fill=X)
